@@ -1,0 +1,7 @@
+parameters:
+    calculator.class: Csuarez\SimpleMathBundle\Math\SimpleCalculator
+
+services:
+    calculator:
+        class: %calculator.class%
+        arguments: []
