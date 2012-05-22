@@ -8,9 +8,5 @@ src/*/cache/*
 src/web/uploads/*
 src/web/bundles/*
 
-# Configuration files
-src/app/config/parameters.ini
-src/app/config/parameters.yml
-
 build/
 dist/
