@@ -5,26 +5,30 @@
 
 	<target name="info">
 		<echo>
-info - Shows this info
-build - Prepares environment for deploy/dist
+info - Shows this help
+prepare - Prepares the file estructure for the build of the project
+build - Prepares environment for distribution
 dist - Generates distributable package
 clean - Deletes previously generated files under build/ and dist/
+test - Tests if the code syntax is correct and executes phpunit tests
+doc - Generates the project documentation using PHP Documentor.
+analyze - Executes the tasks: phpcpd, pdepend, phpmd, phpcb, phploc and phpcs
+phpcpd - Detects copy/pastes in the code.
+pdepend - Calculates some code metrics using PHP Depend.
+phpmd - Analyzes the code to discover potential problems on it.
+phpcb - Generates a browsable report of code violations using PHP CodeBrowser.
+phploc - Calculates the size of the code using  phploc.
+phpcs - Detects standard violations on the code.
 		</echo>
 	</target>
 
-<!--  
-  *Tarea: clean
-  *Descripción: Limpia la carpeta build y la carpeta de la máquina remota dónde se va a hacer deploy
--->
+<!-- clean - Deletes previously generated files under build/ and dist/ -->
   <target name="clean">
     <delete dir="${build.dir}"/>
     <delete dir="${dist.dir}" />
   </target>
-<!--  
-  *Tarea: build
-  *Descripción: Limpia la carpeta build y la carpeta de la máquina remota dónde se va a hacer deploy
--->
 
+<!-- prepare - Prepares the file estructure for the build of the project -->
   <target name="prepare">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}"/>
@@ -33,6 +37,7 @@ clean - Deletes previously generated files under build/ and dist/
     <mkdir dir="${report.dir}/code-browser"/>
   </target>
 
+<!-- build - Prepares environment for distribution -->
   <target name="build" depends="prepare">
     <copy todir="${build.src.dir}">
       <fileset dir="${src.dir}"/>
@@ -44,18 +49,15 @@ clean - Deletes previously generated files under build/ and dist/
       <arg value="${build.src.dir}/web/"/>
     </exec>
   </target>
-  
-<!--  
-  *Tarea: dist
-  *Descripción: Crea un paquete tar.gz listo para distribuir el sistema en la carpeta /dist
--->  
+
+  <!-- dist - Generates distributable package -->
   <target name="dist" depends="build">
     <mkdir dir="${dist.dir}"/>
     <tar destfile="${dist.dir}/${project.name}.tar.gz" basedir="${build.src.dir}" compression="gzip" longfile="gnu"/>
   </target>
 
+<!-- test - Tests if the code syntax is correct and executes phpunit tests -->
   <target name="test" depends="build">
-
     <apply executable="php" failonerror="true">
       <arg value="-l" />
       <fileset dir="${build.src.dir}/src">
@@ -73,10 +75,7 @@ clean - Deletes previously generated files under build/ and dist/
     </exec>
   </target>
 
-<!--  
-  *Tarea: dist
-  *Descripción: Crea en buld/doc la documentación del código en formato HTML
--->  
+<!-- doc - Generates the project documentation using PHP Documentor. -->
   <target name="doc" depends="build">
     <exec executable="phpdoc">
       <arg value="-d" />
@@ -86,8 +85,10 @@ clean - Deletes previously generated files under build/ and dist/
     </exec>
   </target>
 
+<!-- analyze - Executes the tasks: phpcpd, pdepend, phpmd, phpcb, phploc and phpcs -->
   <target name="analyze" depends="phpcpd,pdepend,phpmd,phpcb,phploc,phpcs"/>
 
+<!-- phpcpd - Detects copy/pastes in the code. -->
   <target name="phpcpd" depends="build">
     <exec executable="phpcpd">
       <arg value="--log-pmd" />
@@ -96,6 +97,7 @@ clean - Deletes previously generated files under build/ and dist/
     </exec>
   </target>
 
+<!-- pdepend - Calculates some code metrics using PHP Depend. -->
   <target name="pdepend" depends="build">
     <exec executable="pdepend">
       <arg value="--jdepend-xml=${report.dir}/jdepend.xml" />
@@ -105,6 +107,7 @@ clean - Deletes previously generated files under build/ and dist/
     </exec>
   </target>
 
+<!-- phpmd - Analyzes the code to discover potential problems on it. -->
   <target name="phpmd" depends="build">
     <exec executable="phpmd">
       <arg path="${build.src.dir}/src" />
@@ -115,6 +118,7 @@ clean - Deletes previously generated files under build/ and dist/
     </exec>
     </target>
 
+<!-- phpcb - Generates a browsable report of code violations using PHP CodeBrowser. -->
   <target name="phpcb" depends="build">
     <exec executable="phpcb">
       <arg value="--log" />
@@ -126,6 +130,7 @@ clean - Deletes previously generated files under build/ and dist/
     </exec>
   </target>
 
+<!-- phploc - Calculates the size of the code using  phploc. -->
   <target name="phploc" depends="build">
     <exec executable="phploc">
       <arg value="--log-csv" />
@@ -134,6 +139,7 @@ clean - Deletes previously generated files under build/ and dist/
     </exec>
   </target>
 
+<!-- phpcs - Detects standard violations on the code. -->
   <target name="phpcs" depends="build">
     <exec executable="phpcs">
       <arg value="--report=checkstyle" />
