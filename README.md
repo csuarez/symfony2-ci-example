@@ -16,7 +16,7 @@ This is a simple example configuration of a Symfony2 project for continuous inte
     * PHP Code Sniffer analysis.
     * Generation of PHP Code Browser reports.
 
-* A Travis CI configuration file (it only checks PHP syntax). (`.travis.yml`)
+* A Travis CI configuration file (it only checks PHP syntax and PHPUnit tests). (`.travis.yml`)
 * A Jenkins configuration file (`contrib/jenkins/config.xml`)
 
 ## Try it!
